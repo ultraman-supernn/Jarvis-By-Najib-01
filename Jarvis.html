@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JARVIS HAND BY NAJIB</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:
+    radial-gradient(circle at center,#123747 0%,#06121b 35%,#02050a 80%);
+    color:#00eaff;
+    font-family:Arial,sans-serif;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+
+    background-image:
+    linear-gradient(rgba(0,234,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,234,255,.04) 1px,transparent 1px);
+
+    background-size:30px 30px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    margin:auto;
+    padding:18px 10px 35px;
+}
+
+/* HEADER */
+
+.header{
+    text-align:center;
+    margin-bottom:18px;
+}
+
+.small-title{
+    font-size:10px;
+    letter-spacing:5px;
+    color:#597b88;
+    margin-bottom:7px;
+}
+
+h1{
+    font-size:42px;
+    letter-spacing:5px;
+    color:white;
+
+    text-shadow:
+    0 0 10px #00eaff,
+    0 0 30px #00eaff;
+}
+
+h1 span{
+    color:#00eaff;
+}
+
+.subtitle{
+    margin-top:5px;
+    font-size:10px;
+    letter-spacing:3px;
+    color:#55717d;
+}
+
+/* TOP BAR */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:10px 13px;
+    margin-bottom:10px;
+
+    border:1px solid rgba(0,234,255,.25);
+    border-radius:10px;
+
+    background:rgba(0,20,30,.7);
+}
+
+.online{
+    font-size:10px;
+    letter-spacing:2px;
+    color:#00ff9d;
+}
+
+.online-dot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#00ff9d;
+    box-shadow:0 0 12px #00ff9d;
+    margin-right:5px;
+}
+
+.clock{
+    font-size:12px;
+    color:#71909c;
+}
+
+/* CAMERA */
+
+.camera-frame{
+    position:relative;
+    padding:7px;
+
+    border:1px solid rgba(0,234,255,.4);
+    border-radius:20px;
+
+    background:rgba(0,20,30,.5);
+
+    box-shadow:
+    0 0 25px rgba(0,234,255,.15),
+    inset 0 0 25px rgba(0,234,255,.04);
+}
+
+.camera{
+    position:relative;
+    width:100%;
+    aspect-ratio:4/3;
+
+    background:#000;
+    overflow:hidden;
+    border-radius:14px;
+}
+
+#video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
+}
+
+#canvas{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    transform:scaleX(-1);
+}
+
+/* CAMERA CORNERS */
+
+.corner{
+    position:absolute;
+    width:32px;
+    height:32px;
+    z-index:4;
+    pointer-events:none;
+}
+
+.tl{
+    top:0;
+    left:0;
+    border-top:3px solid #00eaff;
+    border-left:3px solid #00eaff;
+}
+
+.tr{
+    top:0;
+    right:0;
+    border-top:3px solid #00eaff;
+    border-right:3px solid #00eaff;
+}
+
+.bl{
+    bottom:0;
+    left:0;
+    border-bottom:3px solid #00eaff;
+    border-left:3px solid #00eaff;
+}
+
+.br{
+    bottom:0;
+    right:0;
+    border-bottom:3px solid #00eaff;
+    border-right:3px solid #00eaff;
+}
+
+/* SCAN */
+
+.scan{
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+
+    height:2px;
+
+    background:#00eaff;
+
+    box-shadow:
+    0 0 10px #00eaff,
+    0 0 25px #00eaff;
+
+    animation:scan 3s linear infinite;
+
+    pointer-events:none;
+}
+
+@keyframes scan{
+
+    0%{
+        top:0;
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    90%{
+        opacity:1;
+    }
+
+    100%{
+        top:100%;
+        opacity:0;
+    }
+}
+
+/* CAMERA LABEL */
+
+.camera-label{
+    position:absolute;
+    top:10px;
+    left:10px;
+
+    z-index:3;
+
+    padding:6px 8px;
+
+    font-size:8px;
+    letter-spacing:2px;
+
+    color:#00eaff;
+
+    background:rgba(0,0,0,.6);
+
+    border:1px solid rgba(0,234,255,.3);
+    border-radius:5px;
+}
+
+.live{
+    position:absolute;
+    top:10px;
+    right:10px;
+
+    z-index:3;
+
+    color:#ff4263;
+    font-size:9px;
+}
+
+.live-dot{
+    display:inline-block;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#ff4263;
+    margin-right:4px;
+
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{
+        opacity:.2;
+    }
+}
+
+/* MESSAGE */
+
+.message{
+    margin-top:12px;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    background:
+    linear-gradient(
+        90deg,
+        rgba(0,234,255,.08),
+        rgba(0,100,255,.03)
+    );
+
+    border:1px solid rgba(0,234,255,.2);
+}
+
+.message-title{
+    color:#4d6b77;
+    font-size:9px;
+    letter-spacing:3px;
+}
+
+#jarvisText{
+    margin-top:7px;
+
+    color:#d7faff;
+
+    font-size:14px;
+    line-height:1.5;
+
+    min-height:21px;
+}
+
+/* DATA */
+
+.data-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+
+    margin-top:10px;
+}
+
+.data{
+    text-align:center;
+
+    padding:13px 5px;
+
+    border-radius:10px;
+
+    background:#071019;
+
+    border:1px solid #17303d;
+}
+
+.value{
+    font-size:20px;
+    font-weight:bold;
+
+    color:#00eaff;
+
+    text-shadow:0 0 10px #00eaff;
+}
+
+.label{
+    margin-top:4px;
+
+    font-size:8px;
+    letter-spacing:1px;
+
+    color:#4f6873;
+}
+
+/* GESTURE */
+
+.gesture-box{
+    margin-top:10px;
+
+    padding:17px;
+
+    text-align:center;
+
+    border-radius:13px;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(0,234,255,.08),
+        transparent 70%
+    );
+
+    border:1px solid rgba(0,234,255,.2);
+}
+
+.gesture-label{
+    font-size:8px;
+    letter-spacing:4px;
+    color:#526d78;
+}
+
+#gesture{
+    margin-top:7px;
+
+    font-size:25px;
+    font-weight:bold;
+
+    color:#00eaff;
+
+    text-shadow:
+    0 0 10px #00eaff,
+    0 0 25px #0077ff;
+}
+
+/* BUTTON */
+
+button{
+    width:100%;
+
+    margin-top:12px;
+
+    padding:16px;
+
+    border:1px solid #00eaff;
+    border-radius:10px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #00323d,
+        #006070,
+        #00323d
+    );
+
+    color:white;
+
+    font-size:13px;
+    font-weight:bold;
+
+    letter-spacing:2px;
+
+    box-shadow:
+    0 0 18px rgba(0,234,255,.25);
+}
+
+button:active{
+    transform:scale(.97);
+}
+
+button:disabled{
+    opacity:.65;
+}
+
+/* COMMANDS */
+
+.commands{
+    margin-top:12px;
+
+    padding:14px;
+
+    border-radius:11px;
+
+    background:#050b11;
+
+    border:1px solid #142b37;
+}
+
+.command-title{
+    color:#00eaff;
+
+    font-size:9px;
+    letter-spacing:3px;
+
+    margin-bottom:9px;
+}
+
+.command-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.command{
+    padding:6px 8px;
+
+    border-radius:5px;
+
+    background:#09151d;
+
+    border:1px solid #183541;
+
+    color:#66808b;
+
+    font-size:9px;
+}
+
+footer{
+    text-align:center;
+
+    margin-top:20px;
+
+    color:#304955;
+
+    font-size:8px;
+    letter-spacing:3px;
+}
+
+@media(max-width:500px){
+
+    h1{
+        font-size:32px;
+    }
+
+    .data-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="small-title">
+    </div>
+
+        STARK INDUSTRIES // BY NAJIB
+    <h1>
+        J<span>A</span>RVIS
+    </h1>
+
+    <div class="subtitle">
+        JUST A RATHER VERY INTELLIGENT SYSTEM
+    </div>
+
+</div>
+
+
+<!-- TOP BAR -->
+
+<div class="topbar">
+
+    <div class="online">
+
+        <span class="online-dot"></span>
+
+        SYSTEM ONLINE
+
+    </div>
+
+    <div
+    class="clock"
+    id="clock">
+
+        00:00:00
+
+    </div>
+
+</div>
+
+
+<!-- CAMERA -->
+
+<div class="camera-frame">
+
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+
+    <div class="camera">
+
+        <video
+        id="video"
+        autoplay
+        playsinline>
+        </video>
+
+
+        <canvas
+        id="canvas">
+        </canvas>
+
+
+        <div class="scan"></div>
+
+
+        <div class="camera-label">
+            JARVIS VISION
+        </div>
+
+
+        <div class="live">
+
+            <span class="live-dot"></span>
+
+            LIVE
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MESSAGE -->
+
+<div class="message">
+
+    <div class="message-title">
+        JARVIS RESPONSE
+    </div>
+
+    <div id="jarvisText">
+        System standby. Awaiting initialization...
+    </div>
+
+</div>
+
+
+<!-- DATA -->
+
+<div class="data-grid">
+
+    <div class="data">
+
+        <div
+        class="value"
+        id="hands">
+            0
+        </div>
+
+        <div class="label">
+            HANDS
+        </div>
+
+    </div>
+
+
+    <div class="data">
+
+        <div
+        class="value"
+        id="fingers">
+            0
+        </div>
+
+        <div class="label">
+            FINGERS
+        </div>
+
+    </div>
+
+
+    <div class="data">
+
+        <div
+        class="value"
+        id="fps">
+            0
+        </div>
+
+        <div class="label">
+            FPS
+        </div>
+
+    </div>
+
+
+    <div class="data">
+
+        <div
+        class="value"
+        id="confidence">
+            --
+        </div>
+
+        <div class="label">
+            AI
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- GESTURE -->
+
+<div class="gesture-box">
+
+    <div class="gesture-label">
+        GESTURE ANALYSIS
+    </div>
+
+    <div id="gesture">
+        WAITING...
+    </div>
+
+</div>
+
+
+<!-- START -->
+
+<button id="start">
+
+    ⚡ INITIALIZE JARVIS
+
+</button>
+
+
+<!-- COMMANDS -->
+
+<div class="commands">
+
+    <div class="command-title">
+        GESTURE DATABASE
+    </div>
+
+    <div class="command-list">
+
+        <div class="command">
+            ✊ LOCK
+        </div>
+
+        <div class="command">
+            ☝️ SELECT
+        </div>
+
+        <div class="command">
+            ✌️ PEACE
+        </div>
+
+        <div class="command">
+            🤟 COMMAND
+        </div>
+
+        <div class="command">
+            🖐️ READY
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    JARVIS HAND VISION SYSTEM • ONLINE
+
+</footer>
+
+
+</div>
+
+
+<!-- MEDIAPIPE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+
+
+<script>
+
+/* =========================
+   ELEMENT
+========================= */
+
+var video =
+document.getElementById("video");
+
+var canvas =
+document.getElementById("canvas");
+
+var ctx =
+canvas.getContext("2d");
+
+var jarvisText =
+document.getElementById("jarvisText");
+
+var gestureText =
+document.getElementById("gesture");
+
+var handsText =
+document.getElementById("hands");
+
+var fingersText =
+document.getElementById("fingers");
+
+var fpsText =
+document.getElementById("fps");
+
+var confidenceText =
+document.getElementById("confidence");
+
+var startButton =
+document.getElementById("start");
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+
+    var now =
+    new Date();
+
+    var h =
+    String(
+        now.getHours()
+    ).padStart(2,"0");
+
+    var m =
+    String(
+        now.getMinutes()
+    ).padStart(2,"0");
+
+    var s =
+    String(
+        now.getSeconds()
+    ).padStart(2,"0");
+
+    document.getElementById("clock")
+    .innerHTML =
+    h + ":" + m + ":" + s;
+
+}
+
+setInterval(
+    updateClock,
+    1000
+);
+
+updateClock();
+
+
+/* =========================
+   VOICE
+========================= */
+
+function speak(text){
+
+    if(
+        !("speechSynthesis" in window)
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       HAPUS SEMUA SUARA LAMA
+    */
+
+    window.speechSynthesis.cancel();
+
+
+    var voice =
+    new SpeechSynthesisUtterance(text);
+
+
+    voice.lang =
+    "id-ID";
+
+    voice.rate =
+    1.1;
+
+    voice.pitch =
+    0.75;
+
+    voice.volume =
+    1;
+
+
+    window.speechSynthesis.speak(
+        voice
+    );
+
+}
+
+
+/* =========================
+   HAND AI
+========================= */
+
+var handAI =
+new Hands({
+
+    locateFile:function(file){
+
+        return "https://cdn.jsdelivr.net/npm/@mediapipe/hands/"
+        + file;
+
+    }
+
+});
+
+
+handAI.setOptions({
+
+    maxNumHands:2,
+
+    modelComplexity:1,
+
+    minDetectionConfidence:0.6,
+
+    minTrackingConfidence:0.6
+
+});
+
+
+/* =========================
+   GESTURE MEMORY
+========================= */
+
+/*
+   Gesture yang sedang terlihat
+*/
+
+var currentGesture =
+"";
+
+
+/*
+   Gesture yang sedang menunggu
+*/
+
+var pendingGesture =
+"";
+
+
+/*
+   Waktu mulai gesture
+*/
+
+var gestureStartTime =
+0;
+
+
+/*
+   Gesture terakhir
+   yang sudah benar-benar
+   dijalankan
+*/
+
+var executedGesture =
+"";
+
+
+/*
+   Agar suara tidak spam
+*/
+
+var commandLocked =
+false;
+
+
+/* =========================
+   FPS
+========================= */
+
+var frames = 0;
+
+var lastFPS =
+performance.now();
+
+
+/* =========================
+   RESULTS
+========================= */
+
+handAI.onResults(
+function(results){
+
+    canvas.width =
+    video.videoWidth;
+
+    canvas.height =
+    video.videoHeight;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    var totalHands = 0;
+
+
+    if(
+        results.multiHandLandmarks
+    ){
+
+        totalHands =
+        results.multiHandLandmarks.length;
+
+    }
+
+
+    handsText.innerHTML =
+    totalHands;
+
+
+    /* =====================
+       TIDAK ADA TANGAN
+    ===================== */
+
+    if(totalHands === 0){
+
+        gestureText.innerHTML =
+        "SEARCHING...";
+
+        fingersText.innerHTML =
+        "0";
+
+        confidenceText.innerHTML =
+        "--";
+
+
+        /*
+           RESET GESTURE LAMA
+
+           Ini penting agar gesture
+           lama tidak langsung dipakai
+           ketika tangan muncul lagi.
+        */
+
+        pendingGesture =
+        "";
+
+        currentGesture =
+        "";
+
+        gestureStartTime =
+        0;
+
+        executedGesture =
+        "";
+
+        commandLocked =
+        false;
+
+
+        jarvisText.innerHTML =
+        "Scanning environment...";
+
+
+        return;
+
+    }
+
+
+    /* =====================
+       HAND TERDETEKSI
+    ===================== */
+
+    jarvisText.innerHTML =
+    "Target acquired. Analyzing hand gesture...";
+
+
+    var hand =
+    results.multiHandLandmarks[0];
+
+
+    /* DRAW */
+
+    drawConnectors(
+        ctx,
+        hand,
+        HAND_CONNECTIONS,
+        {
+            color:"#00eaff",
+            lineWidth:5
+        }
+    );
+
+
+    drawLandmarks(
+        ctx,
+        hand,
+        {
+            color:"#ffffff",
+            lineWidth:2,
+            radius:7
+        }
+    );
+
+
+    /* COUNT */
+
+    var count =
+    countFingers(hand);
+
+
+    fingersText.innerHTML =
+    count;
+
+
+    confidenceText.innerHTML =
+    "98%";
+
+
+    /* =====================
+       GET GESTURE
+    ===================== */
+
+    var newGesture =
+    getGesture(count);
+
+
+    gestureText.innerHTML =
+    newGesture;
+
+
+    /* =====================
+       GESTURE STABILITY
+    ===================== */
+
+    if(
+        newGesture !== pendingGesture
+    ){
+
+        /*
+           Gesture berubah.
+
+           Jangan langsung eksekusi.
+        */
+
+        pendingGesture =
+        newGesture;
+
+        gestureStartTime =
+        Date.now();
+
+        executedGesture =
+        "";
+
+        commandLocked =
+        false;
+
+    }
+
+
+    var stableTime =
+    Date.now() -
+    gestureStartTime;
+
+
+    /*
+       Gesture harus stabil
+       minimal 350ms.
+    */
+
+    if(
+        stableTime >= 350 &&
+        pendingGesture === newGesture &&
+        !commandLocked
+    ){
+
+        /*
+           SIMPAN gesture
+        */
+
+        executedGesture =
+        newGesture;
+
+        commandLocked =
+        true;
+
+
+        executeGesture(
+            count,
+            newGesture
+        );
+
+    }
+
+
+    /* =====================
+       FPS
+    ===================== */
+
+    frames++;
+
+
+    var now =
+    performance.now();
+
+
+    if(
+        now - lastFPS >= 1000
+    ){
+
+        fpsText.innerHTML =
+        frames;
+
+        frames = 0;
+
+        lastFPS = now;
+
+    }
+
+});
+
+
+/* =========================
+   GESTURE NAME
+========================= */
+
+function getGesture(count){
+
+    if(count === 0){
+
+        return "✊ FIST";
+
+    }
+
+    if(count === 1){
+
+        return "☝️ ONE FINGER";
+
+    }
+
+    if(count === 2){
+
+        return "✌️ PEACE";
+
+    }
+
+    if(count === 3){
+
+        return "🤟 THREE FINGERS";
+
+    }
+
+    if(count === 4){
+
+        return "🖐️ FOUR FINGERS";
+
+    }
+
+    return "🖐️ OPEN HAND";
+
+}
+
+
+/* =========================
+   EXECUTE COMMAND
+========================= */
+
+function executeGesture(
+    count,
+    gesture
+){
+
+    /*
+       HENTIKAN SUARA SEBELUMNYA
+    */
+
+    if(
+        "speechSynthesis" in window
+    ){
+
+        window.speechSynthesis.cancel();
+
+    }
+
+
+    /* FIST */
+
+    if(count === 0){
+
+        jarvisText.innerHTML =
+        "Security lock command accepted.";
+
+        speak(
+        "Security lock activated."
+        );
+
+    }
+
+
+    /* ONE */
+
+    else if(count === 1){
+
+        jarvisText.innerHTML =
+        "Selection mode activated.";
+
+        speak(
+        "Selection mode activated."
+        );
+
+    }
+
+
+    /* TWO */
+
+    else if(count === 2){
+
+        jarvisText.innerHTML =
+        "Peace gesture recognized.";
+
+        speak(
+        "Peace gesture recognized."
+        );
+
+    }
+
+
+    /* THREE */
+
+    else if(count === 3){
+
+        jarvisText.innerHTML =
+        "Command gesture recognized.";
+
+        speak(
+        "Command gesture recognized."
+        );
+
+    }
+
+
+    /* FOUR */
+
+    else if(count === 4){
+
+        jarvisText.innerHTML =
+        "Four finger gesture recognized.";
+
+        speak(
+        "Four finger gesture recognized."
+        );
+
+    }
+
+
+    /* FIVE */
+
+    else if(count === 5){
+
+        jarvisText.innerHTML =
+        "All systems ready.";
+
+        speak(
+        "All systems ready."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   COUNT FINGERS
+========================= */
+
+function countFingers(hand){
+
+    var count = 0;
+
+
+    /*
+       INDEX
+    */
+
+    if(
+        hand[8].y <
+        hand[6].y
+    ){
+
+        count++;
+
+    }
+
+
+    /*
+       MIDDLE
+    */
+
+    if(
+        hand[12].y <
+        hand[10].y
+    ){
+
+        count++;
+
+    }
+
+
+    /*
+       RING
+    */
+
+    if(
+        hand[16].y <
+        hand[14].y
+    ){
+
+        count++;
+
+    }
+
+
+    /*
+       PINKY
+    */
+
+    if(
+        hand[20].y <
+        hand[18].y
+    ){
+
+        count++;
+
+    }
+
+
+    /*
+       THUMB
+    */
+
+    if(
+        Math.abs(
+            hand[4].x -
+            hand[0].x
+        )
+        >
+        Math.abs(
+            hand[3].x -
+            hand[0].x
+        )
+    ){
+
+        count++;
+
+    }
+
+
+    return count;
+
+}
+
+
+/* =========================
+   START JARVIS
+========================= */
+
+startButton.addEventListener(
+"click",
+function(){
+
+    startButton.disabled =
+    true;
+
+    startButton.innerHTML =
+    "⏳ INITIALIZING JARVIS...";
+
+
+    jarvisText.innerHTML =
+    "Initializing vision system...";
+
+
+    /*
+       SUARA PEMBUKA
+    */
+
+    speak(
+    "Good evening. Jarvis system initialized."
+    );
+
+
+    /*
+       CAMERA
+    */
+
+    var camera =
+    new Camera(
+        video,
+        {
+
+            onFrame:
+            async function(){
+
+                await handAI.send({
+                    image:video
+                });
+
+            },
+
+            width:640,
+
+            height:480
+
+        }
+    );
+
+
+    camera.start();
+
+
+    setTimeout(
+    function(){
+
+        startButton.innerHTML =
+        "🟢 JARVIS ONLINE";
+
+        jarvisText.innerHTML =
+        "Jarvis is online. Awaiting hand command.";
+
+    },
+    1800
+    );
+
+});
+
+</script>
+
+</body>
+</html>
